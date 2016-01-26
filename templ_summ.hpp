@@ -15,13 +15,6 @@ void print_all(const T& cont)
     std::cout << std::endl;
 }
 
-
-/**
- * 2nd impl: with for-based-loop
- *
- */
-
-
 template <typename T>
 typename T::value_type summ(const T& cont)
 {

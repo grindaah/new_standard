@@ -1,10 +1,10 @@
 #include <iostream>
 
-//include <veсtor>
 #include <list>
 #include <map>
 
-#include "templ_summ.hpp"
+#include <vector>
+#include "templ_summ2.hpp"
 
 class userClass
 {
@@ -32,16 +32,16 @@ std::ostream& operator << (std::ostream& os, const userClass& uc)
 int main()
 {
 
-    //std::vector<int> v1 = {1,2,3,4,5,6};
+    std::vector<int> v1 = {11,12,13,14,15,16};
     std::list<int> l1 = {1,2,3,4,5,6};
     std::list<userClass> uc1(6);
 
-    //print_all(v1);
+    print_all(v1);
     print_all(l1);
     print_all(uc1);
 
-    std::cout //<< summ(v1) << " "
-        << summ(l1) << std::endl;
+    std::cout << summ(v1) << " " << std::endl;
+    std::cout << summ(l1) << std::endl;
 
 return 0;
 }
