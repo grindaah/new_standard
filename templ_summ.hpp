@@ -15,6 +15,20 @@ void print_all(const T& cont)
     std::cout << std::endl;
 }
 
+/**
+ * printing all values inside container
+ * * all that have "<<" implementation
+ * impl : with array support
+ */
+template <typename T>
+void print_all_array(const T& cont)
+{
+    ///where ARE CBEGIN??
+    //for (auto it = std::cbegin(cont); it != std::cend(cont); ++it)
+    //    std::cout << *it << " ";
+    std::cout << std::endl;
+}
+
 template <typename T>
 typename T::value_type summ(const T& cont)
 {

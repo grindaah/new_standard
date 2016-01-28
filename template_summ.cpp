@@ -4,7 +4,7 @@
 #include <map>
 
 #include <vector>
-#include "templ_summ2.hpp"
+#include "templ_summ.hpp"
 
 class userClass
 {
@@ -32,6 +32,9 @@ std::ostream& operator << (std::ostream& os, const userClass& uc)
 int main()
 {
 
+    int ar[] = {1, 2, 911, 912};
+
+    print_all_array (ar);
     std::vector<int> v1 = {11,12,13,14,15,16};
     std::list<int> l1 = {1,2,3,4,5,6};
     std::list<userClass> uc1(6);
