@@ -1,2 +1,8 @@
 *.so
 *.o
+dtype
+lambda
+itest
+str_enums
+tsumm
+^[a-z].*$
