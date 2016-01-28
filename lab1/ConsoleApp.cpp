@@ -227,17 +227,17 @@ int main()
     //букв в верхнем регистре
     //  Использовать лямбда функцию
     {
-        std::cout << "Задание 10" << std::endl;
-        
-        char s[] = "Hello World!";
-        int count = 0;
-        std::for_each(my_begin(s)
-            , my_end(s)
-            , [&count](const auto& c1) { if (isalpha(c1) && isupper(c1)) count++; }
-        );
-
-            std::cout << "Count of upper = " << count << std::endl;
-
+//        std::cout << "Задание 10" << std::endl;
+//        
+//        char s[] = "Hello World!";
+//        int count = 0;
+//        std::for_each(my_begin(s)
+//            , my_end(s)
+//            , [&count](const auto& c1) { if (isalpha(c1) && isupper(c1)) count++; }
+//        );
+//
+//            std::cout << "Count of upper = " << count << std::endl;
+//
             //__asm
     }
 
