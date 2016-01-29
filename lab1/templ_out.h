@@ -3,10 +3,11 @@
 #  define __TEMPL_OUT__
 
 #include <iostream>
-#include <map>
 #include <string>
+#include <vector>
 
-#include "iterator_add.hpp"
+#include "../iterator_add.hpp"
+
 
 /**
 * printing all values inside container
@@ -16,39 +17,10 @@
 template <typename T>
 void print_all(const T& cont)
 {
-    for (auto it = std::cbegin(cont); it != std::cend(cont); ++it)
+    for (auto it = my_begin(cont); it != my_end(cont); ++it)
         std::cout << *it << " ";
     std::cout << std::endl;
 }
-
-
-template< class C >
-auto my_begin( C& c ) -> decltype(c.begin())
-{
-    return c.begin();
-}
-
-template< class T, std::size_t N >
-T* my_begin( T (&array)[N] )
-{
-    return &array[0];
-}
-
-template< class C >
-auto my_end( C& c ) -> decltype(c.end())
-{
-    return c.end();
-}
-
-template< class T, std::size_t N >
-T* my_end( T (&array)[N] )
-{
-    return &array[N];
-}
-
-template< class C >
-auto begin( const C& c ) -> decltype(c.begin());
-
 
 std::string operator- (std::string& st)
 {
@@ -69,24 +41,54 @@ std::string operator- (std::string& st)
 template <typename T>
 void negate_all(T& cont)
 {
-    for (auto it = std::begin(cont); it != std::end(cont); ++it)
+    for (auto it = my_begin(cont); it != my_end(cont); ++it)
         *it = -*it;
-    //for (auto& it : cont)
-        
 }
 
-template <typename T>
-ostream& operator << (ostream& os, const T& cont)
+template <typename T1, typename T2>
+std::ostream& operator << (std::ostream& os, std::pair<T1, T2> pair)
 {
-
-    std::cout << "Printing from container, type: " << typeinfo(cont).name() << std::endl;
-    for (auto it = cont.cbegin(); it != cont.cend(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
+    std::cout << "Printing from container, type: " << typeinfo(pair).name() << std::endl;
+    //for (auto it = cont.cbegin(); it != cont.cend(); ++it)
+    //    std::cout << *it << " ";
+    //std::cout << std::endl;
 
 }
+
+//1st implementation - for_each
+template <typename T1, typename T2>
+std::vector<typename T1:: value_type> SumCont1(const T1& c1, const T2& c2)
+{
+    std::vector<typename T1:: value_type> result = std::vector<typename T1:: value_type>(std::max(c1.size(), c2.size()));
+
+    //size_t min_size = std::max(c1.size(), c2.size());
+    typename T1:: iterator first1 = my_begin(c1);
+    typename T2:: iterator first2 = my_begin(c2);
+    ///since std c++11 for_each will implement move-semantics for function return statement
+    ////                                                            std::vector<typename T1:: value_type>:: iterator it
+    std::for_each(result.begin(), result.end(),[first1, first2, &c1, &c2] (decltype(result.begin()) it) {
+                if (first1 != c1.end())
+                    *it += *first1++;
+                if (first2 != c2.end())
+                    *it += *first2++;
+            }
+    );
+    return std::move(result);
+}
+
+///2nd implementation - construct from smaller container , transform with addition,
+// then - move rest part via std;:copy
+
+
+/// TODO
+//template <typename T1, typename T2>
+//T1 operator+ (const T1& lhv, const T2& rhv)
+//{
+//    
+//}
 
 //TODO: template ostream << for pair with containers
+// *** or for map ??
 /*ostream& operator << (ostream& os, std::pair <char, std::set<std::string> > set_strings)
 {
     os << set_strings.first << ":" ;

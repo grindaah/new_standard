@@ -194,7 +194,8 @@ int main()
         std::vector<int> v{ 1,2,3,4 };
         std::list<double> l{ 1.1, 2.2, 3.3, 4.4, 5.5 };
 
-        //??? = SumCont(v, l);
+        std::vector<int> v2 = SumCont1(v, l);
+        print_all(v2);
 
 
         //__asm
