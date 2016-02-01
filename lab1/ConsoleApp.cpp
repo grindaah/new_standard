@@ -34,6 +34,9 @@ int main()
         months year[] = { months::January, months::February, months::March };
         size_t n = sizeof(year); //???
 
+
+        std::cout << "size of year[] = " << n << std::endl;
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -48,9 +51,6 @@ int main()
         for (auto& x : v1)
         {
             std::transform(x.begin(), x.end(), x.begin(), ::toupper);
-            //x = ::toupper(x);
-            //x = x.;
-            
         }
 
         print_all(v1);

@@ -59,21 +59,29 @@ std::ostream& operator << (std::ostream& os, std::pair<T1, T2> pair)
 template <typename T1, typename T2>
 std::vector<typename T1:: value_type> SumCont1(const T1& c1, const T2& c2)
 {
-    std::vector<typename T1:: value_type> result = std::vector<typename T1:: value_type>(std::max(c1.size(), c2.size()));
+    typedef std::vector<typename T1:: value_type> res_type;
+    typedef typename std::vector<typename T1:: value_type>::iterator res_iter;
+    res_type result = res_type(std::max(c1.size(), c2.size()));
 
     //size_t min_size = std::max(c1.size(), c2.size());
-    typename T1:: iterator first1 = my_begin(c1);
-    typename T2:: iterator first2 = my_begin(c2);
+    typename T1:: const_iterator first1 = my_begin(c1);
+    typename T2:: const_iterator first2 = my_begin(c2);
     ///since std c++11 for_each will implement move-semantics for function return statement
     ////                                                            std::vector<typename T1:: value_type>:: iterator it
-    std::for_each(result.begin(), result.end(),[first1, first2, &c1, &c2] (decltype(result.begin()) it) {
+    std::for_each(result.begin(), result.end(),[&first1, &first2, &c1, &c2] (res_type it) {
                 if (first1 != c1.end())
-                    *it += *first1++;
+                {
+                    it += *first1;
+                    ++first1;
+                }
                 if (first2 != c2.end())
-                    *it += *first2++;
+                {
+                    it += *first2;
+                    ++first2;
+                }
             }
     );
-    return std::move(result);
+    return result;
 }
 
 ///2nd implementation - construct from smaller container , transform with addition,
