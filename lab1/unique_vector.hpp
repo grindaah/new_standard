@@ -39,6 +39,7 @@ public:
         : V(), cmp(c)
     {}
 
+    ///TODO transform with binOP?
     template <class InputIterator>
         unique_vector(InputIterator first, InputIterator last,
             const Compare& c = Compare()) : V(first, last), cmp(c)
@@ -66,6 +67,7 @@ public:
                 V.swap(result);
             }
         }
+
 
     auto insert(const T& t)
     {
