@@ -10,4 +10,5 @@ all: $(TARGET)
 $(TARGET) : ConsoleApp.cpp
 	$(CC) $(CFLAGS) $(SOURCE) -o $(TARGET)
 
-clean: $(RM) $(TARGET)
+clean: $(TARGET)
+	rm -f $(TARGET)
