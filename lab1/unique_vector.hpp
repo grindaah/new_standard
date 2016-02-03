@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
 
+
 template <class T, class Compare = std::less<T> >
 class unique_vector
 {
@@ -62,7 +63,7 @@ public:
                 ///there is no more back_inserter :(
                 //std::copy(first, last, std::back_inserter(it) );
                 result.insert(result.begin() + dist, first, last);
-                std::unique(result.begin(), result.end(), cmp);
+                std::unique(result.begin(), result.end());
                 V.swap(result);
             }
         }
