@@ -84,9 +84,29 @@ std::vector<typename T1:: value_type> SumCont1(const T1& c1, const T2& c2)
     return result;
 }
 
+//template <typename T1, typename T2>
+
+
 ///2nd implementation - construct from smaller container , transform with addition,
 // then - move rest part via std;:copy
+template <typename T1, typename T2>
+auto SumCont2(const T1& c1, const T2& c2) -> std::vector <decltype( * (c1.begin()) + * (c2.begin()) ) >
+{
+    ///Check this neat typedef in TRT
+    typedef typename std::vector <decltype( *(c1.begin()) + *(c2.begin()) )> res_type;
+    typedef typename T1:: value_type type_cont1;
+    typedef typename T2:: value_type type_cont2;
 
+    /// choose max container for size of result
+    res_type result = res_type( std::max(c1.size(), c2.size()) );
+
+    std::transform(c1.begin(), c1.end(), c2.begin(), result.begin(), [](type_cont1 el1, type_cont2 el2 ) {
+                return el1 + el2;
+            }
+    );
+
+    return result;
+}
 
 /// TODO
 //template <typename T1, typename T2>

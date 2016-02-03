@@ -163,6 +163,7 @@ int main()
     //Собственно для сортировки можно использовать обобщенный алгоритм sort(), 
     //а для задания условия - лямбда-функцию
     {
+        std::cout << "Задание 7" << std::endl;
         //auto absSort = [](auto& cont)
         //{
         //    std::sort(my_begin(cont)
@@ -191,12 +192,16 @@ int main()
     //
     //например:
     {
+        std::cout << "Задание 8" << std::endl;
         std::vector<int> v{ 1,2,3,4 };
-        std::list<double> l{ 1.1, 2.2, 3.3, 4.4, 5.5 };
+        std::list<double> l{ 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7 };
+        std::deque<unsigned char> d{};
+        //std::list<int>l { 1.1, 2.2, 3.3, 4.4, 5.5 };
 
-        std::vector<int> v2 = SumCont1(v, l);
+        auto v2 = SumCont2(v, l);
+        auto v3 = SumCont2(v, d);
         print_all(v2);
-
+        print_all(v3);
 
         //__asm
     }
