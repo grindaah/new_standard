@@ -32,8 +32,15 @@ int main()
 
 
     std::cout << "====================" << std::endl;
+    std::cout << "===Insertion========" << std::endl;
 
-    //sv2.insert_into(v_ins.begin(), v_ins.end(), sv2.get_iter(4));
+    std::set <std::string> v_ins_string = {"Here", "goes", "some", "more", "strings", "I", "will", "paste", "first", "five"};
+    sv1.insert_into(v_ins_string.begin(), v_ins_string.find("I"), sv1.get_iter(4));
+    for (const auto& it : sv1)
+        std::cout << it << " ";
+    std::cout << std::endl;
+
+    sv2.insert_into(v_ins.begin(), v_ins.end(), sv2.get_iter(4));
     for (const auto& it : sv2)
         std::cout << it << " ";
     std::cout << std::endl;
