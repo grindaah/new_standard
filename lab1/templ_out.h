@@ -108,6 +108,44 @@ auto SumCont2(const T1& c1, const T2& c2) -> std::vector <decltype( * (c1.begin(
     return result;
 }
 
+template <typename T>
+struct odd_even_comp
+{
+    bool operator()(const T& a) const
+    {
+        return a % 2 ? true : false;
+    }
+};
+
+template <typename T>
+struct triple_comp
+{
+    bool operator()(const T& a) const
+    {
+        return a % 3 ? true : false;
+    }
+};
+
+//bool odd_even_comp(T& a)
+//{
+//    return a % 2 ? true : false;
+//}
+
+template <typename T1, typename T2, typename T3, typename Comp = odd_even_comp<typename T1:: value_type> >
+void OddEven(const T1& c1, T2& c2, T3& c3, const Comp& comp = Comp())
+{
+    if (!c2.empty())
+    {
+        std::cout << "c2 not empty";
+        return;
+    }
+    if (!c3.empty())
+        return;
+
+    for (const auto& it : c1)
+        comp(it) ? c3.push_front(it) : c2.push_front(it);
+}
+
 /// TODO
 //template <typename T1, typename T2>
 //T1 operator+ (const T1& lhv, const T2& rhv)

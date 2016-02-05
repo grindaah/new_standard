@@ -219,11 +219,23 @@ int main()
     //Исходная последовательность при этом не меняется
     {
         //Например:
+        std::cout << "Задание 9" << std::endl;
         std::vector<int> v{ 1,2,3,4,5 };
         std::list<int> l; //сюда четные
         std::deque<int> d; //а сюда нечетные
                            //OddEven(v, l, d, <условие>);
 
+        OddEven(v, l, d);
+
+        print_all(l);
+        print_all(d);
+
+        l = {};
+        d = {};
+        ///TODO give functor with template deduction
+        OddEven(v, l, d/*, triple_comp*/);
+        print_all(l);
+        print_all(d);
         //__asm
     }
 
