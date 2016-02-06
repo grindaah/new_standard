@@ -126,12 +126,14 @@ struct triple_comp
     }
 };
 
-//bool odd_even_comp(T& a)
-//{
-//    return a % 2 ? true : false;
-//}
+/*template <typename T>
+bool triple_comp(const T& a)
+{
+    return a % 3 ? true : false;
+}*/
 
-template <typename T1, typename T2, typename T3, typename Comp = odd_even_comp<typename T1:: value_type> >
+
+template <typename T1, typename T2, typename T3, typename Comp /*<typename T1:: value_type >*/ = odd_even_comp<typename T1:: value_type> >
 void OddEven(const T1& c1, T2& c2, T3& c3, const Comp& comp = Comp())
 {
     if (!c2.empty())

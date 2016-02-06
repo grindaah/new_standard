@@ -225,6 +225,7 @@ int main()
         std::deque<int> d; //а сюда нечетные
                            //OddEven(v, l, d, <условие>);
 
+        auto comp = triple_comp< decltype(v)::value_type >();
         OddEven(v, l, d);
 
         print_all(l);
@@ -233,7 +234,7 @@ int main()
         l = {};
         d = {};
         ///TODO give functor with template deduction
-        OddEven(v, l, d/*, triple_comp*/);
+        OddEven(v, l, d, comp );
         print_all(l);
         print_all(d);
         //__asm
