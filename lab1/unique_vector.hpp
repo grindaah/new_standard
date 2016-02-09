@@ -7,6 +7,8 @@
 template <class T, class Compare = std::less<T> >
 class unique_vector
 {
+    typedef typename std::vector<T>::iterator iter;
+    typedef typename std::vector<T>::iterator citer;
     std::vector<T> V;
 
     ///order matters (!)
@@ -23,6 +25,7 @@ class unique_vector
         V.swap(res);
     }
 
+    ///TODO probably this overload can be an template function
     void remove_duplicates(std::vector<T>& vec)
     {
         std::set<T> st_vals;
@@ -58,11 +61,11 @@ public:
         return V[index];
     }
 
-    typename std::vector<T>::iterator get_iter(size_t index)
+    iter get_iter(size_t index)
     {
-        typename std::vector<T>::iterator iter = V.begin();
-        std::advance(iter, index);
-        return iter;
+        iter it = V.begin();
+        std::advance(it, index);
+        return it;
     }
 
 
@@ -84,22 +87,38 @@ public:
     template <class InputIterator>
         void insert_into(InputIterator first
                 , InputIterator last
-                , typename std::vector<T>::iterator it
+                , iter it
                 )
         {
             std::vector<T> insertion(first, last);
             remove_duplicates(insertion);
             V.insert(it, insertion.begin(), insertion.end());
-
+            remove_duplicates();
         }
 
 
-    void insert(const T& t)
+    void erase(iter pos)
     {
-        auto i = std::lower_bound(begin(), end(), t, cmp);
-        if (i == end() || cmp(t, *i))
-            V.insert(i, t);
-        return;
+        V.erase(pos);
+    }
+
+    void erase(iter first, iter last)
+    {
+        V.erase(first, last);
+    }
+
+    void erase(std::initializer_list<T> lst)
+    {
+         //std::vector<T> v = std::vector<T>(lst);
+         //remove_duplicates(v);
+         std::set<T> st_vals(lst);
+         auto new_end = std::remove_if(V.begin(), V.end(), [&st_vals](const T& val)
+                 {
+                      return st_vals.find(val) != st_vals.end();
+                 }
+         );
+         V.shrink_to_fit();
+
     }
 
     void find(const T& t) const
