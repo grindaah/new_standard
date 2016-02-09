@@ -26,6 +26,7 @@ class unique_vector
     }
 
     ///TODO probably this overload can be an template function
+    ///what can we do here to avoid code duplication?? dummy parameter?
     void remove_duplicates(std::vector<T>& vec)
     {
         std::set<T> st_vals;
@@ -107,9 +108,10 @@ public:
         V.erase(first, last);
     }
 
+    ///we can use erase here, but it will "move" the rest part of vector each time
     void erase(std::initializer_list<T> lst)
     {
-         //std::vector<T> v = std::vector<T>(lst);
+         std::vector<T> v = std::vector<T>(lst);
          //remove_duplicates(v);
          std::set<T> st_vals(lst);
          auto new_end = std::remove_if(V.begin(), V.end(), [&st_vals](const T& val)
@@ -117,13 +119,17 @@ public:
                       return st_vals.find(val) != st_vals.end();
                  }
          );
-         V.shrink_to_fit();
+         V.resize(std::distance(V.begin(), new_end));
+         //V.shrink_to_fit();
 
     }
 
-    void find(const T& t) const
+    iter find(const T& t) const
     {
-        auto i = std::lower_bound(begin(), end(), t, cmp);
+        auto i = std::find(begin(), end(), t, cmp);
+        return i;
+        ///if we will have this vector sorted - than we will be able to use
+        // VERY faster lower_bound - and we will use following return :
         //return i == end() || cmp(t, *i) ? end() : i;
     }
 };
