@@ -36,7 +36,7 @@ int main()
 
     std::cout << "====================" << std::endl;
     std::cout << "====Finding=========" << std::endl;
-    std::cout << "ss1: find day" << ss1.find("day") << std::endl;
+    std::cout << "ss1: find day" << *( ss1.find("day")) << std::endl;
 
     std::cout << "====================" << std::endl;
     std::cout << "====Insertion=======" << std::endl;

@@ -8,7 +8,7 @@ template <class T, class Compare = std::less<T> >
 class unique_vector
 {
     typedef typename std::vector<T>::iterator iter;
-    typedef typename std::vector<T>::iterator citer;
+    typedef typename std::vector<T>::const_iterator citer;
     std::vector<T> V;
 
     ///order matters (!)
@@ -74,7 +74,6 @@ public:
         : V(), cmp(c)
     {}
 
-    ///TODO transform with binOP?
     template <class InputIterator>
         unique_vector(InputIterator first
                 , InputIterator last
@@ -120,14 +119,22 @@ public:
                  }
          );
          V.resize(std::distance(V.begin(), new_end));
-         //V.shrink_to_fit();
-
     }
 
-    iter find(const T& t) const
+    ///note we are giving cmp function in constructor
+    void sort()
     {
-        auto i = std::find(begin(), end(), t, cmp);
-        return i;
+        std::sort(V.begin(), V.end(), cmp);
+    }
+
+    citer find_if(const T& t, auto EqualPred) const
+    {
+        return std::find_if(V.begin(), V.end(), t, EqualPred);
+    }
+
+    citer find(const T& t) const
+    {
+        return std::find(V.begin(), V.end(), t);
         ///if we will have this vector sorted - than we will be able to use
         // VERY faster lower_bound - and we will use following return :
         //return i == end() || cmp(t, *i) ? end() : i;
