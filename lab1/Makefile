@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -std=c++11
+CFLAGS = -std=c++1y
 
 TARGET = lab1
 SOURCE = ConsoleApp.cpp
