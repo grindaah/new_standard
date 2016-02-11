@@ -21,7 +21,6 @@ public:
     MyString& operator=(MyString&&);
     char operator[](size_t);
 
-    template<typename T>
     void friend Swap(MyString&, MyString&);
 
     friend std::ostream& operator<<(std::ostream&, const MyString&);
