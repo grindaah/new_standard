@@ -1,6 +1,5 @@
 // ConsoleApplication1.cpp : Defines the entry point for the console application.
 //
-#include "stdafx.h"
 
 #include <string>
 #include <iostream>
@@ -12,6 +11,7 @@
 
 
 #include "util_hdr.h"
+#include "in_constraints.hpp"
 
 
 //using namespace std;
@@ -32,7 +32,7 @@ int main()
         std::cout << "My name is "_name;
         std::string s2 = R"(My name is Marina)";
         std::cout << s2 << std::endl;
-        __asm nop
+        //__asm nop
     }
 
 
@@ -74,7 +74,7 @@ int main()
      //а так?
      int n2 = factr(m);
      std::cout << "n2" << n2 << std::endl;
-        __asm nop
+        //__asm nop
     }
 
 
@@ -102,9 +102,9 @@ int main()
 
     {
         std::cout << "Задание 3а" << std::endl;
-        std::cout << 110001010_b <<std::endl;
-        std::cout << 0b110001010 <<std::endl;
-        __asm nop
+        std::cout << "Binary (my operand): 110001010=" << 110001010_b << std::endl;
+        std::cout << "Binary (native operand): 110001010=" << 0b110001010 << std::endl;
+        //__asm nop
 
     }
 
@@ -117,7 +117,7 @@ int main()
 
 
     //std::string sBin= 256_toBinStr;
-    __asm nop
+    //__asm nop
 
 
 
@@ -139,7 +139,12 @@ int main()
     //                Для проверки достаточно создать встроенный массив с размерностью, вычисляемой
     //                посредством constexpr-метода:
     {
-        __asm nop
+        constexpr InConstraints<int> ic = InConstraints<int>(1,10);
+        int ar[ic.get(14)];
+        ///\TODO check call here
+        std::cout << "sizeof int ar[InConstraints] = " << sizeof(ar) << std::endl;
+           // << ", count of elems: " << sizeof(ar) / (sizeof(int) <<std::endl;
+        //__asm nop
     }
 
 
@@ -152,7 +157,7 @@ int main()
         //использование констант на этапе компиляции
 
     {
-        __asm nop
+        //__asm nop
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,12 +166,25 @@ int main()
 
         //5.а - обеспечьте корректное выполнение фрагмента
         {
-            //std::vector< std::unique_ptr< std::string > >  v = {  new std::string("aa"), new std::string("bb"), new std::string("cc") };
+            std::cout << "Задание 5a,b,c,d" << std::endl;
+            std::vector< std::unique_ptr< std::string > >  v;
+            ///\note i did firstly unique_ptr, was it meant here??
+            //possibly i was have to call delete manually when going out of scope
+            v.emplace_back( std::make_unique<std::string>("aa") );
+            v.emplace_back( std::make_unique<std::string>("bb") );
+            v.emplace_back( std::make_unique<std::string>("cc") );
+
+            auto Suff_1 = [] (const auto& s) {
+                return *s += "_1";
+            };
+            std::for_each(v.begin(), v.end(), Suff_1);
+                //{  new std::string("aa"), new std::string("bb"), new std::string("cc") };
         
             //Распечатайте все строки
             for (const auto& it : v)
                 std::cout << *it << " ";
-            __asm nop
+            std::cout << std::endl;
+            //__asm nop
             //???
         } //???
 
@@ -181,7 +199,7 @@ int main()
         {
             //Распечатайте все строки
 
-            __asm nop
+            //__asm nop
             //??? Уничтожение динамически созданных объектов?
         } //???
 
@@ -190,7 +208,7 @@ int main()
 
 
 
-            __asm nop
+            //__asm nop
         }
 
         {//5.d - динамический массив объектов    
@@ -200,7 +218,7 @@ int main()
          //С помощью unique_ptr::operator[] заполните обернутый массив значениями
          //Когда происходит освобождения памяти?
 
-            __asm nop
+            //__asm nop
         }
 
         {//5.e - массивы динамических объектов и пользовательская delete-функция (функтор)
@@ -211,7 +229,7 @@ int main()
 
             std::string* arStrPtr[] = { new std::string("aa"), new std::string("bb"), new std::string("cc") };
 
-            __asm nop
+            //__asm nop
         }
 
         {//5.f Создайте и заполните вектор, содержащий unique_ptr для указателей на std::string
@@ -219,10 +237,10 @@ int main()
          //того же типа
          //Подсказка: перемещающие итераторы и шаблон std::make_move_iterator
 
-            __asm nop
+            //__asm nop
 
         }
-        __asm nop
+        //__asm nop
 
     }
 
@@ -255,7 +273,7 @@ int main()
     //Подсказка: строчки удобно записывать в файл посредством функции fputs()
 
 
-    __asm nop
+    //__asm nop
     }//закрытие файла???
 
     */
