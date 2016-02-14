@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 
+#include <ctime>
 
 #include "util_hdr.h"
 #include "in_constraints.hpp"
@@ -123,13 +124,9 @@ int main()
         std::cout << "To Binary (my operand): 256=" << 256_toBinStr << std::endl;
         std::cout << "To Binary (my operand): 749=" << 749_toBinStr << std::endl;
         std::cout << "To Binary (my operand): 854873749=" << 854873749_toBinStr << std::endl;
-        std::cout << binsize(5664444412094104) << std::endl;
-        std::cout << binsize(64444412094104) << std::endl;
         //__asm nop
 
     }
-
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,27 +295,40 @@ int main()
     //в. Последний владелец указателя должен закрыть файл
 
     //Подсказка: имитировать порядок записи можно с помощью функции rand()
-    /*
     {
 
     //"писатели":
     //Создать writer1, writer2
-
-
+    std::cout << "Задание 6" << std::endl;
+    std::shared_ptr<FILE > Writer1(fopen ("test.txt", "w"), &fclose);
+    std::shared_ptr<FILE > Writer2(Writer1);
 
     //например, источники данных:
-    char ar1[] = "Writer1";
-    char ar2[] = "Writer2";
+    const char ar1[] = "Writer1\n";
+    const char ar2[] = "Writer2\n";
 
+    int steps = 1000;
+
+    std::srand(unsigned(std::time(0)));
+    for (int i = 0; i < steps; ++i)
+    {
+        if (std::rand() % 2 == 0)
+            fputs(ar1, Writer1.get());
+        else 
+            fputs(ar2, Writer2.get());
+    }
     //заданное число итераций случайным образом позволяем одному из "писателей" записать в файл
     //свою строчку
     //Подсказка: строчки удобно записывать в файл посредством функции fputs()
-
+    ///\note strace on getting out from scope:
+    //  write(3, "Writer2\nWriter2\nWriter1\nWriter2\n"..., 4096) = 4096
+    //  write(3, "Writer2\nWriter2\nWriter1\nWriter2\n"..., 3904) = 3904
+    //  close(3)                                = 0
 
     //__asm nop
     }//закрытие файла???
 
-    */
+    
     int n = 0;
     std::cin >> n;
 }
