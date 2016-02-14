@@ -118,6 +118,17 @@ int main()
 
     //std::string sBin= 256_toBinStr;
     //__asm nop
+    {
+        std::cout << "Задание 3b" << std::endl;
+        std::cout << "To Binary (my operand): 256=" << 256_toBinStr << std::endl;
+        std::cout << "To Binary (my operand): 749=" << 749_toBinStr << std::endl;
+        std::cout << "To Binary (my operand): 854873749=" << 854873749_toBinStr << std::endl;
+        std::cout << binsize(5664444412094104) << std::endl;
+        std::cout << binsize(64444412094104) << std::endl;
+        //__asm nop
+
+    }
+
 
 
 
@@ -141,9 +152,8 @@ int main()
     {
         constexpr InConstraints<int> ic = InConstraints<int>(1,10);
         int ar[ic.get(14)];
-        ///\TODO check call here
-        std::cout << "sizeof int ar[InConstraints] = " << sizeof(ar) << std::endl;
-           // << ", count of elems: " << sizeof(ar) / (sizeof(int) <<std::endl;
+        std::cout << "sizeof int ar[InConstraints] = " << sizeof(ar) << std::endl
+            << ", count of elems: " << sizeof(ar) / (sizeof(int)) <<std::endl;
         //__asm nop
     }
 
@@ -166,7 +176,7 @@ int main()
 
         //5.а - обеспечьте корректное выполнение фрагмента
         {
-            std::cout << "Задание 5a,b,c,d" << std::endl;
+            std::cout << "Задание 5a,b,c" << std::endl;
             std::vector< std::unique_ptr< std::string > >  v;
             ///\note i did firstly unique_ptr, was it meant here??
             //possibly i was have to call delete manually when going out of scope
@@ -217,7 +227,18 @@ int main()
          //с элементами std::string
          //С помощью unique_ptr::operator[] заполните обернутый массив значениями
          //Когда происходит освобождения памяти?
+            std::cout << "Задание 5d" << std::endl;
+            std::unique_ptr<std::string []> arrStrPtr (new std::string[3] );
+            arrStrPtr[0] = std::string("dynarray[0]");
+            arrStrPtr[1] = std::string("dynarray[1]");
+            arrStrPtr[2] = std::string("dynarray[2]");
+            std::cout << arrStrPtr[2] << std::endl;
 
+            ///Deleter[] called here
+            //==4715== LEAK SUMMARY:
+            //==4715==    definitely lost: 0 bytes in 0 blocks
+            //==4715==    indirectly lost: 0 bytes in 0 blocks
+            //==4715==      possibly lost: 0 bytes in 0 blocks
             //__asm nop
         }
 
@@ -226,8 +247,28 @@ int main()
          //Создайте unique_ptr для такого массива
          //Реализуйте пользовательскую delete-функцию (функтор) для корректного 
          //освобождения памяти
-
-            std::string* arStrPtr[] = { new std::string("aa"), new std::string("bb"), new std::string("cc") };
+            {
+                /*
+                int n = 5;
+                std::unique_ptr<int* [] > p(new int* [n]{new int(1),new int(2), new int(3),new int (4), new int(5)});
+                auto p1 = std::make_unique<int* []>(n); //unique_ptr<A[], std::default_delete<A[]>>
+                for (int i = 0; i < n; ++i)
+                {
+                    *p[i] = i;
+                    std::cout << *p[i] << std::endl;
+                }*/
+            } //???
+            std::unique_ptr<std::string* [], void(*)(std::string*[])> p_arStr  (
+                    new std::string*[3] {new std::string("aa"), new std::string("bb"), new std::string("cc")} ,
+                    [](auto* ptr)
+                    {
+                    ///note array don't know its size here, memory leaking
+                    //should cycle through elems and delete 'em
+                        delete[] ptr;
+                    }
+            );
+                    for (int i = 0; i < 3; ++i)
+                        std::cout << *p_arStr[i] << " ";
 
             //__asm nop
         }
@@ -262,6 +303,7 @@ int main()
 
     //"писатели":
     //Создать writer1, writer2
+
 
 
     //например, источники данных:
