@@ -1,6 +1,5 @@
 // ConsoleApplication1.cpp : Defines the entry point for the console application.
 //
-#include "stdafx.h"
 
 #include <vector>
 #include <memory>
@@ -10,7 +9,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <iterator> 
+#include <iterator>
 #include <regex>
 #include <cmath>
 
@@ -54,7 +53,7 @@ int main()
                 std::cout << "decimal very-on failed" << std::endl;
         }
         std::cout << "Ints in container:" << myints.size() / sizeof(int) << std::endl;
-        __asm nop
+        //__asm nop
     }
     // 1b ООбеспечить прием от пользователя целых значений в шестнадцатеричной форме.
     {
@@ -74,7 +73,7 @@ int main()
                     std::cout << "hexadecimal very-on failed" << std::endl;
             }
         std::cout << "Ints in container:(not working for now)" << myints.size() / sizeof(int) << std::endl;
-        __asm nop
+        //__asm nop
     }
 
 
@@ -97,18 +96,48 @@ int main()
                 std::cout << "scientific very-on failed" << std::endl;
         }
         std::cout << "Ints in container:(not working for now)" << myints.size() / sizeof(int) << std::endl;
-        __asm nop
+        //__asm nop
     }
 
     // 1d Требуется узнать - есть ли хотя бы одна десятичная цифра в строке
     {
+        std::regex re1("[ |^]+[+|-]?[0-9]+[ |$]+");
+        std::string inp = "";
 
-        __asm nop
+        std::cout << "Enter string containing number:";
+        while(inp != "q")
+        {
+            std::getline(std::cin, inp, '\n');
+            if (std::regex_search(inp, re1))
+            {
+                ///\TODO smatch here
+                std::cout << "OK it contains " << std::endl;
+            }
+            else
+                std::cout << "no decimal found" << std::endl;
+        }
+
+        //__asm nop
     }
 
 
     //1e Требуется найти все десятичные цифры в строке
     {
+        std::regex re1("[\s|^][+|-]?[0-9]+[\s|$]");
+        std::string inp = "asdfjafwjiopio 89c 33 jkoasdfjkasdf893289";
+
+        std::cout << "Enter string containing number:";
+        while (inp != "q")
+        {
+            std::cin >> inp;
+            if (std::regex_search(inp, re1))
+            {
+                ///\TODO smatch here
+                std::cout << "OK it contains " << std::endl;
+            }
+            else
+                std::cout << "no decimal found" << std::endl;
+        }
 
 
     }
@@ -137,7 +166,7 @@ int main()
     {
         /// calc Cl = {1, "+", 4, "-", 1, "^", 4, "/", 2, "*", 1, "%", 2};
         
-        __asm nop
+        //__asm nop
     }
 
 
@@ -166,7 +195,7 @@ int main()
     //Для проверки распечатайте библиотеку
 
     {
-        std::tuple<
+        //std::tuple<
 
     }
 
@@ -202,7 +231,7 @@ int main()
 
 
         //...
-        __asm nop
+        //__asm nop
     }
 
     int a;
