@@ -15,6 +15,7 @@
 
 #include "templ_out.h"
 
+#include "books.h"
 
 
 int main()
@@ -167,6 +168,27 @@ int main()
     //Для хранения значка операции и соответствующего ему действия логично использовать
     //std::map<char, ???> 
     {
+        using namespace std::placeholders;
+        MyCalc<double> c;
+        c('-', std::minus<double>() );
+        c('+', &my_plus<double>);
+        c('*', my_multiply<double>());
+        c('/', [](const double& a, const double& b)
+                { 
+                return a / b;
+                }
+         );
+        c('^', pow);
+        ///\TODO 2 binds more
+        ///c('%', std::bind(division_res));
+
+
+        std::cout << "484.3 + 4949 = " << (c['+'])(484.3, 4949) << std::endl;
+        std::cout << "484.3 - 4949 = " << (c['-'])(484.3, 4949) << std::endl;
+        std::cout << "484.3 * 4949 = " << (c['*'])(484.3, 4949) << std::endl;
+        std::cout << "4949 / 484.3 = " << (c['/'])(4949, 484.3) << std::endl;
+        std::cout << "484.3 ^ 2.1 = " << (c['^'])(484.3, 2.1) << std::endl;
+        //std::map <char, std::function<double (double&, double&)> >;
         /// calc Cl = {1, "+", 4, "-", 1, "^", 4, "/", 2, "*", 1, "%", 2};
         
         //__asm nop
@@ -198,6 +220,28 @@ int main()
     //Для проверки распечатайте библиотеку
 
     {
+        std::vector<std::string> authors = {"Jack London", "Joanne Rowling", "Arthur Conan Doyle",
+         "Ernest Heminguey", "Chuck Palahniuk", "Albert Einstein", "Steven Hawking", "Francesco Petrarka"
+        , "John Fawls", "Victor Pelevin", "Lev Tolstoy"};
+        std::vector<std::string> names = {"Hero of our Time", "Harry Potter", "War and Peace",
+            "Fight Club", "The Grand Design", "Life of Insects", "The Magus",
+            "Martin Iden", "A Study in Red", "Oldman"};
+
+        typedef std::tuple <std::string, std::string, int, Genre> tuple_book;
+        std::vector<tuple_book> books_vec;
+        tuple_book book1 {"aa1", "bb1", 1111, Genre::scifi};
+
+        for (int i = 0; i < 10; ++i)
+            books_vec.push_back(
+                   tuple_book{ names[i]
+                   , authors[i]
+                   , rand() % 2000
+                   , static_cast<Genre>(rand() % static_cast<int>(Genre::unspecified))
+                   } );
+        for (const auto& b : books_vec)
+            std::cout << b << std::endl;
+        //std::tuple <std::string, std::string, int, Genre> book1 = {names[0], authors[0], 1111, Genre::scifi};
+
         //std::tuple<
 
     }
