@@ -101,7 +101,7 @@ int main()
 
     // 1d Требуется узнать - есть ли хотя бы одна десятичная цифра в строке
     {
-        std::regex re1("[ |^]+[+|-]?[0-9]+[ |$]+");
+        std::regex re1("(\\s+|^)[+|-]?[0-9]+[ |$]+");
         std::string inp = "";
 
         std::cout << "Enter string containing number:";
@@ -123,7 +123,7 @@ int main()
 
     //1e Требуется найти все десятичные цифры в строке
     {
-        std::regex re1("[\s|^][+|-]?[0-9]+[\s|$]");
+        /*std::regex re1("[\s|^][+|-]?[0-9]+[\s|$]");
         std::string inp = "asdfjafwjiopio 89c 33 jkoasdfjkasdf893289";
 
         std::cout << "Enter string containing number:";
@@ -137,7 +137,7 @@ int main()
             }
             else
                 std::cout << "no decimal found" << std::endl;
-        }
+        }*/
 
 
     }
