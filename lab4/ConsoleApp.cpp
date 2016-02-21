@@ -16,6 +16,7 @@
 #include "templ_out.h"
 
 #include "books.h"
+#include "human.h"
 
 
 int main()
@@ -268,9 +269,16 @@ int main()
         //(то есть на самом деле два деда и две бабы):
 
 
-        std::shared_ptr<human> grandM1(new human("Eva"));
-        std::shared_ptr<human> grandM2(new human("Adam"));
-        std::shared_ptr<human> Ma1 = std::make_shared( human::child(grandM1.get(), grandM2.get(), "Isaak" ));
+        std::shared_ptr<human> grandM1 = std::make_shared<human>("Eva",false);
+        std::shared_ptr<human> grandM2 = std::make_shared<human>("Adam");
+        std::shared_ptr<human> Ma1 = human::child(grandM1, grandM2, "Isaak");
+
+        std::shared_ptr<human> Ma2 = human::child(grandM1, grandM2, "Angela", false);
+        std::shared_ptr<human> Ma3 = human::child(grandM1, grandM2, "Michael");
+        std::shared_ptr<human> Ma4 = human::child(grandM1, grandM2, "Vladimir");
+        std::shared_ptr<human> Ma5 = human::child(grandM1, grandM2, "Isaak jr");
+
+        std::cout << grandM1 << grandM2 << Ma1 << Ma2 << Ma3 << Ma4 << Ma5;
 
         //...
 
