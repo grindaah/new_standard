@@ -15,6 +15,8 @@ class human
     bool alive;
     bool male;
 
+    int printer_depth;
+
     std::pair<human_weak_ptr, human_weak_ptr> parents;
     std::vector<human_weak_ptr> children;
 
@@ -59,6 +61,7 @@ public:
         new_human->set_parents(h1,h2);
         return new_human;
     }
+
     std::string get_name()
     {
         return name;
@@ -77,6 +80,29 @@ public:
     ///get closest children
     human_ptr next()
     {}
+
+    void print_tree(std::ostream& os, int max_depth = 15)
+    {
+        if (max_depth > 0)
+        {
+            os << "Name: " <<  name 
+                << ", children: " << children.size() << std::endl;
+            if (parents.first.lock())
+            {
+                std::string shift = std::string(" ",15 - max_depth);
+                os << shift << "Parent 1: ";
+                parents.first.lock()->print_tree(os, max_depth-1);
+            }
+            if (parents.second.lock())
+            {
+                std::string shift = std::string(" ",15 - max_depth);
+                os << shift << "Parent 2: ";
+                parents.second.lock()->print_tree(os, max_depth-1);
+            }
+        }
+        else
+            os << "max depth reached, call print tree with increased max_depth";
+    }
 };
 
 std::ostream& operator << (std::ostream& os, std::shared_ptr<human> hmn)

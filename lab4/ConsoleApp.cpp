@@ -280,6 +280,22 @@ int main()
 
         std::cout << grandM1 << grandM2 << Ma1 << Ma2 << Ma3 << Ma4 << Ma5;
 
+        std::shared_ptr<human> grandY1 = std::make_shared<human>("Eval",false);
+        std::shared_ptr<human> grandY2 = std::make_shared<human>("Adamas");
+        std::shared_ptr<human> Ya1 = human::child(grandY1, grandY2, "Vladimir Putin");
+
+        std::shared_ptr<human> cub1 = human::child(Ma2, Ya1, "Victor");
+
+        std::shared_ptr<human> cub2 = human::child(Ma2, Ya1, "Andrey");
+
+        
+        std::cout << grandY1 << grandY2 << cub1 << cub2;
+
+        cub2->print_tree(std::cout);
+        ///\note tests
+        // child(GrandM1, Ma1) --> error Can't be child between parent->child
+        // child(Ma2, Ma3) -> error can't be chiild between 
+        // bool cub1-> is_brother(cub2) (same_parents)
         //...
 
         //у них появились дети - child():
