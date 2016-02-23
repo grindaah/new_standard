@@ -13,7 +13,7 @@ class MyString
     char* m_pStr;
 public:
     MyString(const char* pStr=nullptr);
-    MyString(const MyString&); 
+    MyString(const MyString&);
     MyString(MyString&&);
     ~MyString(void);
 
@@ -24,6 +24,8 @@ public:
     void friend Swap(MyString&, MyString&);
 
     friend std::ostream& operator<<(std::ostream&, const MyString&);
+
+    MyString operator+(const MyString& rhv);
 
 private:
     void Construct(const char*);
