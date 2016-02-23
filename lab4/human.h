@@ -81,6 +81,7 @@ public:
     human_ptr next()
     {}
 
+    ///\TODO store the initial value of depth to calc the shift
     void print_tree(std::ostream& os, int max_depth = 15)
     {
         if (max_depth > 0)
