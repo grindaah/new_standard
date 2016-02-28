@@ -274,6 +274,41 @@ int main()
          //Посредством алгоритмя copy() скопируйте элементы вектора в пустой список с элементами 
          //того же типа
          //Подсказка: перемещающие итераторы и шаблон std::make_move_iterator
+            //typedef std::unique_ptr<std::string> str_ptr;
+            typedef std::vector< std::unique_ptr<std::string> >::iterator Iter;
+            std::vector< std::unique_ptr<std::string> > m_vec_str;
+
+            m_vec_str.emplace_back( std::make_unique<std::string>("aa") );
+            m_vec_str.emplace_back( std::make_unique<std::string>("bb") );
+            m_vec_str.emplace_back( std::make_unique<std::string>("cc") );
+
+            std::vector< std::unique_ptr<std::string> > str_cpy;
+
+            std::copy(std::make_move_iterator(m_vec_str.begin() )
+                      , std::make_move_iterator(m_vec_str.end() )
+                      , std::back_inserter(str_cpy));
+
+
+            std::cout << "Initial vector contains not valid pointers: " << m_vec_str.size() << std::endl;
+            for (auto it = m_vec_str.begin(); it!=m_vec_str.end(); ++it )
+                if (*it)
+                    std::cout << *(*it) << " ";
+                else
+                    std::cout << "Not valid " << " ";
+            std::cout << std::endl;
+            /*std::cout << std::endl << "Copy vector contains" << std::endl;*/
+
+            std::cout << "second vector contains" << std::endl;
+            for (auto it = str_cpy.begin(); it!=str_cpy.end(); ++it )
+                std::cout << *(*it) << " ";
+            //std::cout << std::endl << "Copy vector contains" << std::endl;
+            //for (auto it : str_cpy)
+            //    std::cout << *it << " ";
+            /*{ std::make_unique<std::string>("aa_vec")
+                        , std::make_unique<std::string>("bb_vec")
+                        , std::make_unique<std::string>("cc_vec")
+                        };*/
+
 
             //__asm nop
 
