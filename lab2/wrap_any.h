@@ -29,6 +29,7 @@ public:
     }
 
     ///Letting the constructors be defaults
+    virtual ~BaseSerial(){};
 };
 
 template<typename T> class Any : public BaseSerial
@@ -60,11 +61,10 @@ public:
         m_p = new Any<T>(t);
     }
 
-    /*template<typename T>
-    WrapAny(const Any<T>& a)
+    ~WrapAny()
     {
-        m_p = a;
-    }*/
+        delete m_p;
+    }
 
     friend WrapAny operator+ (const WrapAny& lhv, const WrapAny& rhv)
     {

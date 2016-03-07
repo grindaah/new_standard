@@ -25,5 +25,4 @@ int main()
     ///must be 5355blabla
     std::cout << "+= result " << w << std::endl;
 
-
 }
