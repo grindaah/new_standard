@@ -5,7 +5,6 @@
 
 #include <string>
 #include <iostream>
-#include <string.h>
 #include <initializer_list>
 #include <utility>
 
@@ -61,11 +60,11 @@ public:
     MyArray(const std::initializer_list<T>& lst)
     {
         allocate(lst.size());
-        for (auto it : lst)
-        {
-            size_t i = std::distance(std::begin(lst), it);
-            m_ptr[i] = std::move(it);
-        }
+        size_t i = 0;
+        ///move semantics doesn't work here,
+        /// check http://open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4166.pdf
+        for (auto it = lst.begin(); it != lst.end(); ++it)
+            m_ptr[i++] = std::move(*it);
     }
 
     MyArray(const MyArray& other)
@@ -144,7 +143,7 @@ public:
 
     void push(const T& val)
     {
-        if (m_reserved < (m_size+10))
+        if (m_reserved < (m_size + res_copy_tail))
             *(m_ptr + m_size) = val;
         m_size++;
     }
@@ -161,7 +160,7 @@ public:
 
     T* operator[] (size_t idx) const
     {
-        return (m_ptr + idx);
+        return &m_ptr[idx];
     }
 
     friend std::ostream& operator<<(std::ostream& os, const MyArray& ar)
