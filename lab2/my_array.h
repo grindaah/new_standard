@@ -19,8 +19,9 @@ class MyArray
 {
     T* m_ptr;
 
-    size_t m_reserved;
-    size_t m_size;
+    size_t m_reserved = 0;
+    size_t m_size = 0;
+
 
     void Construct(size_t sz)
     {
@@ -58,11 +59,16 @@ class MyArray
     {
         m_ptr = static_cast<T *> (realloc((m_ptr), sz * reserve_mul));
         m_reserved = sz * reserve_mul;
+        reallocs_calls++;
+
     }
 
     //MyArray() = delete;
     //void Construct(const char*);
 public:
+    size_t reallocs_calls = 0;
+
+
     MyArray(const std::initializer_list<T>& lst)
     {
         allocate(lst.size());
@@ -132,7 +138,6 @@ public:
         }
     }
 
-
     virtual ~MyArray()
     {
         std::cout << "Destructor calld" << std::endl;
@@ -149,6 +154,14 @@ public:
             Realloc(m_size+1);
         *(m_ptr + m_size) = val;
         m_size++;
+    }
+
+    T pop()
+    {
+        if (m_size > 0)
+            return m_ptr[--m_size];
+        else
+            return T();
     }
 
     size_t size() const
@@ -187,13 +200,22 @@ public:
         return os;
     }
 
-    /*void friend Swap (MyArray&, MyArray&);
+    friend void Swap (MyArray& ar1, MyArray& ar2)
+    {
+        ///check allocated block is enough for swap
+        T* tmp_ptr1 = ar1.m_ptr;
+        T* tmp_ptr2 = ar2.m_ptr;
+        if (ar1.reserved() < ar2.size())
+            ar1.allocate(ar2.size());
+        if (ar2.reserved() < ar1.size())
+            ar2.allocate(ar1.size());
 
-    friend std::ostream& operator<<(std::ostream&, const MyArray&);
+        ar1.m_ptr = tmp_ptr2;
+        ar2.m_ptr = tmp_ptr1;
+    }
 
 
-    MyArray& operator=(MyArray&&);
-    T operator[](size_t);
+/*    MyArray& operator=(MyArray&&);
     MyArray operator+(const MyArray& rhv);*/
 
 
