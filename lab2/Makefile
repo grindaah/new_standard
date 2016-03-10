@@ -20,4 +20,4 @@ my_array.o: my_array.cpp my_array.h
 	$(CC) $(CFLAGS) -c my_array.cpp
 
 clean:
-	rm -f *.o mstring_test wrap_test
+	rm -f *.o mstring_test wrap_test marray_test

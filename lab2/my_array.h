@@ -7,9 +7,11 @@
 #include <iostream>
 #include <initializer_list>
 #include <utility>
+#include <string.h>
 
 const size_t res_copy_tail = 10;
 const size_t reserve_mul = 5;
+const size_t def_size = 1000;
 
 
 template<typename T>
@@ -20,18 +22,22 @@ class MyArray
     size_t m_reserved;
     size_t m_size;
 
-    void Construct(T* p, size_t sz);
+    void Construct(size_t sz)
+    {
+        for (size_t i = 0; i < m_size; ++i)
+            m_ptr[i] = T();
+    }
+
     void Deconstruct()
     {
-        ///we can m_ptr[] and delete[]... hmmm
-        for (size_t i = 0; i != m_size; ++i)
-            delete m_ptr[i];
+        for (size_t i = 0; i < m_size; ++i)
+            static_cast<T*>(&m_ptr[i])->~T();
     }
 
     void allocate(const size_t& sz)
     {
-        size_t for_reserve = sz * reserve_mul;
-        m_ptr = static_cast<T *>(malloc(for_reserve));
+        size_t for_reserve = (sz > 1) ? sz * reserve_mul : def_size;
+        m_ptr = static_cast<T *>(calloc(for_reserve, sizeof(T)));
         if(m_ptr)
         {
             m_reserved = for_reserve;
@@ -43,15 +49,15 @@ class MyArray
 
     void deallocate()
     {
-        free(m_ptr, m_size);
+        free(m_ptr);
         m_size = 0;
         m_reserved = 0;
     }
 
     void Realloc(size_t sz)
     {
-        m_ptr = realloc(m_ptr, sz * 8);
-        m_reserved = sz * 8;
+        m_ptr = static_cast<T *> (realloc((m_ptr), sz * reserve_mul));
+        m_reserved = sz * reserve_mul;
     }
 
     //MyArray() = delete;
@@ -76,37 +82,37 @@ public:
             Deconstruct();
             ///assuming that i allocate same size
             if (other.size() <= (m_reserved - sizeof(T)*res_copy_tail))
-                std::copy(m_ptr, other.get_ptr(), other.size());
+                memcpy(m_ptr, other.get_ptr(), sizeof(T)* new_size);
+                //std::copy(m_ptr, other.get_ptr(), other.size());
             else
             {
-                //deallocate();
-                //allocate(other.size());
                 Realloc(other.size());
-                std::copy(m_ptr, other.get_ptr(), other.size());
+                memcpy(m_ptr, other.get_ptr(), sizeof(T)* new_size);
+                //std::copy(m_ptr, other.get_ptr(), other.size());
             }
+            m_size = new_size;
         }
     }
 
     MyArray& operator=(const MyArray& other)
     {
-        /*std::cout << "Copy opertor= called" << std::endl;
+        std::cout << "Copy opertor= called" << std::endl;
         if(this != &other)
         {
             size_t new_size = other.size();
             Deconstruct();
             ///assuming that i allocate same size
             if (other.size() <= (m_reserved - sizeof(T)*res_copy_tail))
-                std::copy(m_ptr, other.get_ptr(), other.size());
+                memcpy(m_ptr, other.get_ptr(), sizeof(T)* new_size);
+                //std::copy(m_ptr, other.get_ptr(), other.size());
             else
             {
-                deallocate();
-                allocate(other.size());
-                std::copy(m_ptr, other.get_ptr(), other.size());
+                Realloc(other.size());
+                memcpy(m_ptr, other.get_ptr(), sizeof(T)* new_size);
+                //std::copy(m_ptr, other.get_ptr(), other.size());
             }
-        }*/
-
-        //MyArray(std::forward<T>(rhv));
-        //return MyArray(rhv);
+            m_size = new_size;
+        }
     }
 
     MyArray& arr_create(T&& new_ar)
@@ -119,17 +125,10 @@ public:
         if(this != &other)
         {
             m_size = other.size();
-            Deconstruct();
+            //m_reserved
 
-            ///\note only one element moved
-            if (other.size() <= (m_reserved - sizeof(T)*res_copy_tail))
-                m_ptr = std::move(other.get_ptr());
-            else
-            {
-                deallocate();
-                allocate(other.size());
-                m_ptr = std::move(other.get_ptr());
-            }
+            m_ptr = other.get_ptr();
+            other.deactivate();
         }
     }
 
@@ -137,26 +136,41 @@ public:
     virtual ~MyArray()
     {
         std::cout << "Destructor calld" << std::endl;
+        Deconstruct();
+        deallocate();
+        //for (size_t i = 0; i < m_size; ++i)
         ///for... delete
-        delete m_ptr;
+        //delete m_ptr;
     }
 
     void push(const T& val)
     {
         if (m_reserved < (m_size + res_copy_tail))
-            *(m_ptr + m_size) = val;
+            Realloc(m_size+1);
+        *(m_ptr + m_size) = val;
         m_size++;
     }
 
-    size_t size()
+    size_t size() const
     {
         return m_size;
     }
 
-    T* get_ptr()
+    T* get_ptr() const
     {
         return m_ptr;
     }
+
+    size_t reserved() const
+    {
+        return m_reserved;
+    }
+
+    void deactivate()
+    {
+        m_ptr = nullptr;
+    }
+
 
     T* operator[] (size_t idx) const
     {

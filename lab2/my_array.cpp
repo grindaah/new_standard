@@ -1,93 +1,92 @@
-#include "my_string.h"
+#include "my_array.h"
 
-using namespace std;
 
-MyString::MyString(const char* pStr)
+/*MyArray::MyArray(const char* pStr)
 {
     if(pStr)
         Construct(pStr);
     else
-        m_pStr=nullptr;
+        m_ptr=nullptr;
 }
 
-MyString::~MyString(void)
+MyArray::~MyArray(void)
 {
-    std::cout << "Destructor calld" << std::endl;
-    delete[] m_pStr;
+
 }
 
-MyString& MyString::operator=(const MyString& other)
+MyArray& MyArray::operator=(const MyArray& other)
 {
     std::cout << "Copy opertor = called" << std::endl;
-    if(this != &other && other.m_pStr != nullptr)
+    if(this != &other && other.m_ptr != nullptr)
     {
-        size_t count = strlen(other.m_pStr) + 1;
-        delete m_pStr;
-        m_pStr = new char[count];
-        memcpy (m_pStr, other.m_pStr, count);
+        size_t count = strlen(other.m_ptr) + 1;
+        delete m_ptr;
+        m_ptr = new char[count];
+        memcpy (m_ptr, other.m_ptr, count);
     }
     return *this;
 }
 
-MyString::MyString(const MyString& other)
+MyArray::MyArray(const MyArray& other)
 {
     std::cout << "Copy constructor called" << std::endl;
-    if(other.m_pStr)
-        Construct(other.m_pStr);
+    if(other.m_ptr)
+        Construct(other.m_ptr);
     else
-        m_pStr = nullptr;
+        m_ptr = nullptr;
 }
 
-void MyString::Construct(const char* pStr)
+
+void MyArray::Construct(const char* pStr)
 {
     size_t count = strlen(pStr) + 1;
-    m_pStr = new char[count];
+    m_ptr = new char[count];
     ///possibly fastest way (std::copy as alternative)
-    memcpy (m_pStr, pStr, count);
+    memcpy (m_ptr, pStr, count);
 }
 
 ///move construct
-MyString::MyString(MyString&& other)
+MyArray::MyArray(MyArray&& other)
 {
     std::cout << "Move constructor" << std::endl;
-    m_pStr = other.m_pStr;
-    other.m_pStr = nullptr;
+    m_ptr = other.m_ptr;
+    other.m_ptr = nullptr;
 }
 
 ///move operator=
-MyString& MyString::operator=(MyString&& other)
+MyArray& MyArray::operator=(MyArray&& other)
 {
     std::cout << "Move operator = called" << std::endl;
-    delete m_pStr;
-    m_pStr = other.m_pStr;
-    other.m_pStr = nullptr;
+    delete m_ptr;
+    m_ptr = other.m_ptr;
+    other.m_ptr = nullptr;
 
     return *this;
 }
 
-ostream& operator<<(ostream& o, const MyString& str)
+ostream& operator<<(ostream& o, const MyArray& str)
 {
-    return o << str.m_pStr;
+    return o << str.m_ptr;
 }
 
-MyString MyString:: operator+(const MyString& rhv)
+MyArray MyArray:: operator+(const MyArray& rhv)
 {
     std::cout << "operator + called" << std::endl;
-    size_t count = strlen(rhv.m_pStr) + 1;
-    void* end_it = m_pStr + strlen(m_pStr);
+    size_t count = strlen(rhv.m_ptr) + 1;
+    void* end_it = m_ptr + strlen(m_ptr);
     ///possibly fastest way (std::copy as alternative)
-    memcpy (end_it, rhv.m_pStr, count);
+    memcpy (end_it, rhv.m_ptr, count);
     return *this;
 
 }
 
-char MyString::operator[](size_t i)
+char MyArray::operator[](size_t i)
 {
-    size_t len = strlen(m_pStr);
+    size_t len = strlen(m_ptr);
     if (i < len)
-        return m_pStr[i];
+        return m_ptr[i];
     else
-        return m_pStr[len];
+        return m_ptr[len];
         //we can throw exception here
         //throw std::out_of_range("Out of range!");
-}
+}*/
