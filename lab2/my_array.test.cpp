@@ -2,7 +2,9 @@
 
 #include "my_array.h"
 #include "my_string.h"
+#include "../time_measure.hpp"
 #include <stdlib.h>
+#include <vector>
 
 
 int main ()
@@ -24,10 +26,29 @@ int main ()
 
     std::cout << "maf1 = " << maf1 << std::endl;
 
-    for (size_t i = 0; i < 1000; i++)
-        maf1.push(rand() % 1000);
-    std::cout << "maf1 after 1000pushes: " << maf1 << std::endl;
-    std::cout << "maf1 calls realloc:" << maf1.reallocs_calls;
+    {
+        raii_time ri;
+
+        for (size_t i = 0; i < 100000000; i++)
+            maf1.push(rand() % 1000);
+        //std::cout << "maf1 after 1000pushes: " << maf1 << std::endl;
+        std::cout << "maf1 calls realloc:" << maf1.reallocs_calls;
+
+    }
+
+    std::cout << "time spent: " << last_result << "ms" << std::endl;
+
+    std::vector<float> vaf1 = {5. , 4., 121.2,};
+    {
+        raii_time ri;
+
+        for (size_t i = 0; i < 100000000; i++)
+            vaf1.push_back(rand() % 1000);
+        //std::cout << "maf1 after 1000pushes: " << maf1 << std::endl;
+    }
+
+    std::cout << "VVV time spent: " << last_result << "ms" << std::endl;
+
 
     MyArray<MyString>  ar1 { MyString("AAA"), MyString ("qwerty"), MyString("blabla")};
 

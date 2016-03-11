@@ -57,7 +57,7 @@ class MyArray
 
     void Realloc(size_t sz)
     {
-        m_ptr = static_cast<T *> (realloc((m_ptr), sz * reserve_mul));
+        m_ptr = static_cast<T *> (realloc(m_ptr, sz * sizeof(T) * reserve_mul));
         m_reserved = sz * reserve_mul;
         reallocs_calls++;
 
@@ -119,6 +119,7 @@ public:
             }
             m_size = new_size;
         }
+        return *this;
     }
 
     MyArray& arr_create(T&& new_ar)
@@ -194,7 +195,7 @@ public:
     {
         os << "Array sz:" << ar.m_size << ", reserved:" << ar.m_reserved
               << std::endl;
-        for (int i = 0; i < ar.m_size; ++i)
+        for (size_t i = 0; i < ar.m_size; ++i)
             os << *ar[i] << ", ";
         os << std::endl;
         return os;

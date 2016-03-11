@@ -1,14 +1,14 @@
 CC=g++
 
-CFLAGS=-std=c++1y -g
+CFLAGS=-std=c++1y -g -Wall
 
 all: mstring_test wrapper_test marray_test
 
 mstring_test: my_string.o
 	$(CC) $(CFLAGS) my_string.o my_string.test.cpp -o mstring_test
 
-marray_test: my_array.o
-	$(CC) $(CFLAGS) my_array.o my_array.test.cpp -o marray_test
+marray_test: my_array.o my_string.o
+	$(CC) $(CFLAGS) my_array.o my_string.o my_array.test.cpp -o marray_test
 
 wrapper_test: my_string.o
 	$(CC) $(CFLAGS) my_string.o wrap_any.test.cpp -o wrap_test
