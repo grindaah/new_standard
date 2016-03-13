@@ -20,18 +20,15 @@ MyString& MyString::operator=(const MyString& other)
 {
     std::cout << "Copy opertor = called" << std::endl;
     if(this != &other && other.m_pStr != nullptr)
-    {
-        size_t count = strlen(other.m_pStr) + 1;
-        delete m_pStr;
-        m_pStr = new char[count];
-        memcpy (m_pStr, other.m_pStr, count);
-    }
+        Construct(other.m_pStr);
     return *this;
 }
 
 MyString::MyString(const MyString& other)
 {
     std::cout << "Copy constructor called" << std::endl;
+    if (other.m_pStr == m_pStr)
+        return;
     if(other.m_pStr)
         Construct(other.m_pStr);
     else
@@ -70,16 +67,17 @@ ostream& operator<<(ostream& o, const MyString& str)
     return o << str.m_pStr;
 }
 
-MyString MyString:: operator+(const MyString& rhv)
+MyString operator+(const MyString&lhv, const MyString& rhv)
 {
+    MyString result(lhv.m_pStr);
     std::cout << "operator + called" << std::endl;
     size_t count = strlen(rhv.m_pStr) + 1;
-    void* end_it = m_pStr + strlen(m_pStr);
+    void* end_it = result.m_pStr + strlen(result.m_pStr);
     ///possibly fastest way (std::copy as alternative)
     memcpy (end_it, rhv.m_pStr, count);
-    return *this;
-
+    return result;
 }
+
 
 char MyString::operator[](size_t i)
 {

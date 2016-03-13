@@ -25,7 +25,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream&, const MyString&);
 
-    MyString operator+(const MyString& rhv);
+    friend MyString operator+(const MyString& lhv, const MyString& rhv);
 
 private:
     void Construct(const char*);
