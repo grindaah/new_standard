@@ -3,10 +3,11 @@
 #  define __TEMPL_OUT__
 
 #include <iostream>
-#include <map>
 #include <string>
+#include <vector>
 
-#include "iterator_add.hpp"
+#include "../iterator_add.hpp"
+
 
 /**
 * printing all values inside container
@@ -16,39 +17,10 @@
 template <typename T>
 void print_all(const T& cont)
 {
-    for (auto it = std::cbegin(cont); it != std::cend(cont); ++it)
+    for (auto it = my_begin(cont); it != my_end(cont); ++it)
         std::cout << *it << " ";
     std::cout << std::endl;
 }
-
-
-template< class C >
-auto my_begin( C& c ) -> decltype(c.begin())
-{
-    return c.begin();
-}
-
-template< class T, std::size_t N >
-T* my_begin( T (&array)[N] )
-{
-    return &array[0];
-}
-
-template< class C >
-auto my_end( C& c ) -> decltype(c.end())
-{
-    return c.end();
-}
-
-template< class T, std::size_t N >
-T* my_end( T (&array)[N] )
-{
-    return &array[N];
-}
-
-template< class C >
-auto begin( const C& c ) -> decltype(c.begin());
-
 
 std::string operator- (std::string& st)
 {
@@ -69,24 +41,122 @@ std::string operator- (std::string& st)
 template <typename T>
 void negate_all(T& cont)
 {
-    for (auto it = std::begin(cont); it != std::end(cont); ++it)
+    for (auto it = my_begin(cont); it != my_end(cont); ++it)
         *it = -*it;
-    //for (auto& it : cont)
-        
+}
+
+template <typename T1, typename T2>
+std::ostream& operator << (std::ostream& os, std::pair<T1, T2> pair)
+{
+    std::cout << "Printing from container, type: " << typeinfo(pair).name() << std::endl;
+    //for (auto it = cont.cbegin(); it != cont.cend(); ++it)
+    //    std::cout << *it << " ";
+    //std::cout << std::endl;
+
+}
+
+//1st implementation - for_each
+template <typename T1, typename T2>
+std::vector<typename T1:: value_type> SumCont1(const T1& c1, const T2& c2)
+{
+    typedef std::vector<typename T1:: value_type> res_type;
+    typedef typename std::vector<typename T1:: value_type>::iterator res_iter;
+    res_type result = res_type(std::max(c1.size(), c2.size()));
+
+    //size_t min_size = std::max(c1.size(), c2.size());
+    typename T1:: const_iterator first1 = my_begin(c1);
+    typename T2:: const_iterator first2 = my_begin(c2);
+    ///since std c++11 for_each will implement move-semantics for function return statement
+    ////                                                            std::vector<typename T1:: value_type>:: iterator it
+    std::for_each(result.begin(), result.end(),[&first1, &first2, &c1, &c2] (res_type it) {
+                if (first1 != c1.end())
+                {
+                    it += *first1;
+                    ++first1;
+                }
+                if (first2 != c2.end())
+                {
+                    it += *first2;
+                    ++first2;
+                }
+            }
+    );
+    return result;
+}
+
+//template <typename T1, typename T2>
+
+
+///2nd implementation - construct from smaller container , transform with addition,
+// then - move rest part via std;:copy
+template <typename T1, typename T2>
+auto SumCont2(const T1& c1, const T2& c2) -> std::vector <decltype( * (c1.begin()) + * (c2.begin()) ) >
+{
+    ///Check this neat typedef in TRT
+    typedef typename std::vector <decltype( *(c1.begin()) + *(c2.begin()) )> res_type;
+    typedef typename T1:: value_type type_cont1;
+    typedef typename T2:: value_type type_cont2;
+
+    /// choose max container for size of result
+    res_type result = res_type( std::max(c1.size(), c2.size()) );
+
+    std::transform(c1.begin(), c1.end(), c2.begin(), result.begin(), [](type_cont1 el1, type_cont2 el2 ) {
+                return el1 + el2;
+            }
+    );
+
+    return result;
 }
 
 template <typename T>
-ostream& operator << (ostream& os, const T& cont)
+struct odd_even_comp
 {
+    bool operator()(const T& a) const
+    {
+        return a % 2 ? true : false;
+    }
+};
 
-    std::cout << "Printing from container, type: " << typeinfo(cont).name() << std::endl;
-    for (auto it = cont.cbegin(); it != cont.cend(); ++it)
-        std::cout << *it << " ";
-    std::cout << std::endl;
+template <typename T>
+struct triple_comp
+{
+    bool operator()(const T& a) const
+    {
+        return a % 3 ? true : false;
+    }
+};
 
+/*template <typename T>
+bool triple_comp(const T& a)
+{
+    return a % 3 ? true : false;
+}*/
+
+
+template <typename T1, typename T2, typename T3, typename Comp /*<typename T1:: value_type >*/ = odd_even_comp<typename T1:: value_type> >
+void OddEven(const T1& c1, T2& c2, T3& c3, const Comp& comp = Comp())
+{
+    if (!c2.empty())
+    {
+        std::cout << "c2 not empty";
+        return;
+    }
+    if (!c3.empty())
+        return;
+
+    for (const auto& it : c1)
+        comp(it) ? c3.push_front(it) : c2.push_front(it);
 }
 
+/// TODO
+//template <typename T1, typename T2>
+//T1 operator+ (const T1& lhv, const T2& rhv)
+//{
+//    
+//}
+
 //TODO: template ostream << for pair with containers
+// *** or for map ??
 /*ostream& operator << (ostream& os, std::pair <char, std::set<std::string> > set_strings)
 {
     os << set_strings.first << ":" ;

@@ -18,6 +18,6 @@ int main()
         std::cout << *it << " " << std::endl;
 
     std::cout << "If you see this - vector test passed" << std::endl;
-    std::cout << "OK";
+    std::cout << "OK" << std::endl;
 
 }
